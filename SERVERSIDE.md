@@ -36,7 +36,7 @@ Whenever the code responsible for sending password reset link makes those links,
 # 2. Credential stuffing
 ### Found in:-
 23andMe user accounts
-### DEscription:-
+### Description:-
 The attacker used previously compromised credentials from unrelated breaches and attempted automated logins on 23andMe’s authentication endpoint.
 Because a portion of users reused passwords on multiple services and the platform lacked strong protection (mandatory MFA, effective rate-limiting, anomaly detection), the attacker successfully authenticated into a number of user accounts.
 ### Steps to Reproduce:-
