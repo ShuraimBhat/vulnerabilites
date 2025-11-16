@@ -33,6 +33,3 @@ This causes an attacker stealing those links and performing mass account takeove
 This issues has a very easy solution. I have myself performed this and it worked !!.
 Whenever the code responsible for sending password reset link makes those links, just add https as scheme instead of http. And you will observe that now all the accounts are safe and data cannot be stolen.
 
-### Impact:- This causes an attacker stealing those links and performing mass account takeovers and security compromises.
-In the above steps, I am talking about token on plain HTTP in step 6 and 7. While you are seeing the token in HTTPS because you are referring to steps 8 onward.
-So, an attack can capture the security token before and then the victim will see the final link in his/her browser i.e. this link: https://en.instagram-brand.com/register/reset/<token>?email=<email>
