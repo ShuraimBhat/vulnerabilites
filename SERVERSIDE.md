@@ -50,40 +50,40 @@ Set the target to the application’s /login endpoint.
 3 Execute High-Volume Login Attempts
 Send the credential list to the authentication endpoint at a controlled but high rate.
 Observe the following:
-*No effective rate-limiting
-*No CAPTCHA
-*No MFA prompt
-*No account lockout after failures
+* No effective rate-limiting
+* No CAPTCHA
+* No MFA prompt
+* No account lockout after failures
 
 4 Identify Successful Logins
 If reused credentials are accepted, the platform logs in the attacker normally without any alert.
 
 5 Access Connected Features (Privilege Abuse)
 For any account successfully accessed:
-*Open DNA Relatives
-*Open Family Tree
+* Open DNA Relatives
+* Open Family Tree
 Confirm that extended information is viewable without additional authorization.
 
 6 Review Server Response & Logging
 Check if:
-*The system generates alerts for anomalous login behavior
-*Session tokens regenerate after login
-*Any IP throttling restricts the activity
+* The system generates alerts for anomalous login behavior
+* Session tokens regenerate after login
+* Any IP throttling restricts the activity
 
 ### Impact:- 
-*Unauthorized login to legitimate user accounts.
-*Exposure of profile details such as name, location, birth year, shared DNA %, and relation data.
-*Data exposure extended from ~14,000 directly compromised accounts to millions of related profiles.
-*Increased risk of identity fraud, targeted phishing, and genetic-relationship inference.
-*Regulatory penalties and reputational damage to the organization.
+* Unauthorized login to legitimate user accounts.
+* Exposure of profile details such as name, location, birth year, shared DNA %, and relation data.
+* Data exposure extended from ~14,000 directly compromised accounts to millions of related profiles.
+* Increased risk of identity fraud, targeted phishing, and genetic-relationship inference.
+* Regulatory penalties and reputational damage to the organization.
 
 ### Mitigation:-
-*Enforce mandatory MFA for all accounts.
-*Implement aggressive rate-limiting on login endpoints.
-*Introduce CAPTCHA after multiple failures.
-*Use device fingerprinting and anomaly-based login detection.
-*Enforce password reuse detection and breach password alerts.
-*Add real-time automated bot detection.
+* Enforce mandatory MFA for all accounts.
+* Implement aggressive rate-limiting on login endpoints.
+* Introduce CAPTCHA after multiple failures.
+* Use device fingerprinting and anomaly-based login detection.
+* Enforce password reuse detection and breach password alerts.
+* Add real-time automated bot detection.
 
 
 
