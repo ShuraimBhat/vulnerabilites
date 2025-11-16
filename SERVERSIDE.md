@@ -1,7 +1,7 @@
 # Authorization and Session vulnerabilities
 These vulnerabilities arise when a system fails to properly verify user identity or securely maintain a user’s session. Weak or improperly enforced authentication allows attackers to impersonate users, while poor session management lets attackers hijack active sessions. Common problems include weak passwords, lack of multi-factor authentication, insecure session IDs, session IDs exposed in URLs, predictable tokens, missing session timeout, and failure to regenerate session IDs after login. When exploited, these flaws can lead to unauthorized access, privilege escalation, data theft, and complete account takeover.
 
-# Variants
+# Variants:-
 #  1. Broken Authentication and Session Management
 ### Found in:- 
 http://en.instagram-brand.com/register/reset/<the security token here>?email=<email address here
