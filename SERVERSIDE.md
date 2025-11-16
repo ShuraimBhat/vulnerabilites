@@ -110,8 +110,11 @@ Note the sessionID cookie. Enter the email address and Proceed >.
 
 ### Mitigation
 Use Cryptographically Strong Reset Tokens
+
 Token must be generated using a CSPRNG (e.g., 32+ bytes, URL-safe).
+
 Never use Base64 of user ID, timestamps, sequential numbers, or hashed emails.
+
 Example used by Google: 256-bit random token mapped to server-side table.
 
 
