@@ -162,7 +162,7 @@ In short the attacker is able to take over the session of the guest userB on thi
 ### Mitigation
 The session id should be renewed once the password is entered.
 
-# JWT misconfiguration
+# 6.JWT misconfiguration
 ### Found on:-
 jira
 ### Description:
