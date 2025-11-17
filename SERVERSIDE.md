@@ -142,9 +142,9 @@ Turnoff Intercept and notice that your login request has been fulfilled
 
 
 # 5. Session Fixation
-## Found in:-
+### Found in:-
 Nextcloud Talk
-## Description:-
+### Description:-
 The password-protected room in Nextcloud Talk does not regenerate or invalidate the guest session ID after a user enters the room password.
 ### Steps to reproduce:-
 1 userA shares a talk room and protects it with a password
@@ -161,6 +161,44 @@ The password-protected room in Nextcloud Talk does not regenerate or invalidate 
 In short the attacker is able to take over the session of the guest userB on this talk room.
 ### Mitigation
 The session id should be renewed once the password is entered.
+
+# JWT misconfiguration
+### Found on:-
+jira
+### Description:
+As we mentioned earlier, the HackerOne for Jira application, after installing it, creates an integration between the HackerOne platform and the atlassian where cases can be synchronized from HackerOne to atlassian
+And vice versa. So, after installation, administrators jira account is allowed to go https://YOUDOMIN.atlassian.net/plugins/servlet/ac/com.hackerone/get-started-with-hackerone-on-jira When going to this page, the following message will appear:
+Image
+•
+37.89 KiB
+•
+F1196098: H1PlugConf.png
+
+
+
+
+When you click on "click here", you will be directed to a link this "https://hackerone.com/apps/atlassian/claim-app?jwt=<TOKEN>" containing JWT parameter to complete the integration process. So. Based on the About jira description, an employee with "BSSIC" privileges is not allowed to access the application configuration. After testing if the HackerOne for Jira app. checks the permissions of Jira users before providing the user with the JWT, it is found that the [HackerOne for Jira] application does not verify the user's permissions and generates the JWT code for a user with basic privileges. This allows this malicious user to link their hackerone account to an instance of a jira that they do not own. Which leads, for example, to leak names of private projects or create issues in private projects .. etc
+### Steps To Reproduce
+
+Go to Jira cloud and create jira instance.
+
+Add user with Basic roles.
+
+The administrator creates 8 projects and is restricted to accessing 5 projects for the administrator only.
+
+Admin Install HackerOne for Jira app.
+
+User Go to {BaseUrl}/plugins/servlet/ac/com.hackerone/get-started-with-hackerone-on-jira
+
+User steals a hackerone generated configuration link https://hackerone.com/apps/atlassian/claim-app?jwt=<TOKEN> and uses it to link a Jira instance to their hackerone account
+
+Now user can create issue in private project or linked H1 report with private issue project.
+
+### Impact
+attacker can Create issue in priavet jira Project
+attacker can Leaked priavet jira Project name.
+When an administrator tries to link an instance of jira to the H1 account, they will not be able to because the instance has been linked to the attacking H1 account
+
 
 
 
