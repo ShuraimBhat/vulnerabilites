@@ -325,3 +325,101 @@ https://mtn.ng/offers/list?phone=2349138557692
 ### Impact
 This vulnerability allow an attacker to access any MTN number in Nigeria and allow threat actors to subscribe data or airtime to the victims.
 It can also allow attackers to send messages of their choice to their targeted victims and the victims might think that the message come from MTN.
+
+# 4.Vertical Privilige Escalation
+### Found On
+The issue was identified in the Lovable AI Workspace Management API, specifically the endpoint:
+POST /workspaces/<WORKSPACE_ID>/tool-preferences/ai_gateway/enable
+### Description
+The API endpoint responsible for enabling or disabling the workspace-wide Lovable AI feature fails to enforce proper server-side role authorization.
+Although the ability to toggle this feature is intended exclusively for workspace Owners/Admins, an account with the Editor role can directly call the same endpoint using its own JWT and successfully disable the feature.
+### Steps to reproduce:-
+1. Log in as Admin (Account A)
+
+Navigate to workspace settings and disable the Lovable AI feature.
+
+Capture the network request responsible for this action:
+
+Captured Admin Request
+
+POST /workspaces/<WORKSPACE_ID>/tool-preferences/ai_gateway/enable HTTP/2
+Host: lovable-api.com
+Authorization: Bearer <OWNER_TOKEN>
+Content-Type: application/json
+
+{"approval_preference":"disable"}
+
+2. Modify the Request
+
+Replace the Authorization header with the Editor’s JWT token:
+
+Modified Request Using Editor Token
+
+POST /workspaces/<WORKSPACE_ID>/tool-preferences/ai_gateway/enable HTTP/2
+Host: lovable-api.com
+Authorization: Bearer <EDITOR_JWT>
+Content-Type: application/json
+
+{"approval_preference":"disable"}
+
+3. Send the Request as Editor
+
+Even though Editors should not be allowed to toggle this setting,
+the server accepts the request and disables Lovable AI across the workspace.
+
+### Impact
+The Lovable AI feature powers all the AI-assisted components of a workspace, including:
+* Prompt integrations
+* AI-generated content
+* Model-driven actions
+* Automated assistance and tooling
+* Any feature using the AI Gateway backend
+Since only Admins are supposed to control this workspace-wide setting, allowing an Editor to disable it creates a significant disruption:
+* Editors can break functionality for all workspace members.
+* Critical AI features become non-functional.
+* Core workflows relying on AI are halted.
+* This leads to workspace-wide operational downtime.
+* Represents a clear violation of role-based access control (RBAC) expectations.
+* This vulnerability constitutes Broken Access Control and allows unauthorized privilege escalation from Editor → Admin-level action.
+
+# 6. HTTP method tampering byepass
+### Found On
+The issue was discovered on DRIVE.NET
+### Description
+The target server improperly reveals the full list of supported HTTP methods when sent an invalid or unsupported method. Instead of securely rejecting the request, the server responds with a "405 Method Not Allowed" status and an Allow header listing all permitted methods.
+### Steps to Reproduce
+1. Navigate to the target URL
+Open the vulnerable endpoint in a browser or through Burp Suite.
+
+2. Intercept the Request
+Use Burp Suite to intercept the outgoing GET request.
+Example original request:
+GET /<path> HTTP/1.1
+Host: <target>
+
+3. Modify the HTTP Method
+Replace the method GET with an invalid method such as:
+ABCD /<path> HTTP/1.1
+Host: <target>
+
+4. Forward the Request
+Forward the modified request to the server.
+
+5. Observe the Response
+The server returns:
+405 Method Not Allowed or 501 Method Unimplemented, and
+An Allow header listing enabled methods.
+Example response headers:
+HTTP/1.1 405 Method Not Allowed
+Allow: GET, POST, PUT, DELETE, OPTIONS
+The presence of PUT and DELETE confirms insecure method configuration.
+
+### Impact
+
+The server discloses sensitive HTTP methods (e.g., PUT, DELETE) to any client.
+
+If these methods are enabled without access controls, an attacker may:
+* Upload arbitrary files via PUT (potential web shell or malicious content).
+* Modify or overwrite existing server files.
+* Delete resources using DELETE.
+* Bypass application-layer restrictions by interacting directly with the server.
