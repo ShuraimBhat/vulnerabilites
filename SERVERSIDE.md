@@ -141,6 +141,27 @@ Turnoff Intercept and notice that your login request has been fulfilled
 2FA Protection bypass. Attacker could gain access despite the 2FA protection by victim
 
 
+# 5. Session Fixation
+## Found in:-
+Nextcloud Talk
+## Description:-
+The password-protected room in Nextcloud Talk does not regenerate or invalidate the guest session ID after a user enters the room password.
+### Steps to reproduce:-
+1 userA shares a talk room and protects it with a password
+
+2 userB opens links but doesn't enter the password yet
+
+3 Attacker steals the cookies from userB
+
+4 userB logs in
+
+5 attacker is now also able to read the conversation etc
+
+### Impact
+In short the attacker is able to take over the session of the guest userB on this talk room.
+### Mitigation
+The session id should be renewed once the password is entered.
+
 
 
 
