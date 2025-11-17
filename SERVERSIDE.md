@@ -1,4 +1,4 @@
-# Authorization and Session vulnerabilities
+# 1.Authorization and Session vulnerabilities
 These vulnerabilities arise when a system fails to properly verify user identity or securely maintain a user’s session. Weak or improperly enforced authentication allows attackers to impersonate users, while poor session management lets attackers hijack active sessions. Common problems include weak passwords, lack of multi-factor authentication, insecure session IDs, session IDs exposed in URLs, predictable tokens, missing session timeout, and failure to regenerate session IDs after login. When exploited, these flaws can lead to unauthorized access, privilege escalation, data theft, and complete account takeover.
 
 # Variants:-
@@ -118,7 +118,7 @@ Never use Base64 of user ID, timestamps, sequential numbers, or hashed emails.
 Example used by Google: 256-bit random token mapped to server-side table.
 
 # 4. 2FA Byepass Technique
-## Description:-
+### Description:-
 this is a failure in null check of the entered code. In simple terms, the 2FA while logging in can be bypassed by sending a blank code. This could be because of incorrect comparison of entered code with true code. A pre-validation (may be null check) before comparing the codes would fix the issue
 Affected URL or select Asset from In-Scope: Glassdoor 2FA
 Affected Parameter: code
@@ -200,7 +200,43 @@ attacker can Leaked priavet jira Project name.
 When an administrator tries to link an instance of jira to the H1 account, they will not be able to because the instance has been linked to the attacking H1 account
 
 
+# 2.Authorization / Access Control Issues
 
+# 1.IDOR
+### Description
+Insecure Direct Object Reference (called IDOR from here) occurs when a application exposes a reference to an internal implementation object. Using this way, it reveals the real identifier and format/pattern used of the element in the storage backend side. The most common example of it (altrough is not limited to this one) is a record identifier in a storage system (database, filesystem and so on).
+IDOR do not bring a direct security issue because, by itself, it reveals only the format/pattern used for the object identifier. IDOR bring, depending on the format/pattern in place, a capacity for the attacker to mount a enumeration attack in order to try to probe access to the associated objects.
+### found on :
+https://hackerone.com/graphql
+### Steps to reproduce:
+Create two h1 accounts as attacker and victim and then create a scope asset respectively
+
+Victim create a new custom tag
+
+Assign tag to attacker's scope then capture the request
+
+You will obtain a request whose the operationName: AddTagToAssets and contains tagId parameter which has a base64 cipher text within
+
+If you decode it, the result's format is gid://hackerone/AsmTag/4979xxxx
+
+Bruteforce the AsmTagId then replace to your tagId parameter
+
+You will obtain 200 OK response status contains the error messages:
+
+Code
+{"data":null,"errors":[{"message":"AsmTag does not exist","locations":[{"line":2,"column":3}],"path":["addTagToAssets"],"type":"NOT_FOUND"}]}
+
+But no worries, this issue can still be produced if you look at your assets page
+
+Successfully to disclose victim's custom tag without any interaction with victim
+
+Detail about vulnerability and PoC on the attachment video file below.
+
+### Remediation:
+IDOR means that you directly alter a database object by using user submitted data in the query before checking or validating that data.
+You should first check if the user that submits the request isn't tampering and isn't submitting any ID's that do not belong to his account.
+### Impact
+Lead to disclose all of victim's new custom tags without any interaction with victim.
 
 
 
