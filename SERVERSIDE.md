@@ -117,6 +117,29 @@ Never use Base64 of user ID, timestamps, sequential numbers, or hashed emails.
 
 Example used by Google: 256-bit random token mapped to server-side table.
 
+# 4. 2FA Byepass Technique
+## Description:-
+this is a failure in null check of the entered code. In simple terms, the 2FA while logging in can be bypassed by sending a blank code. This could be because of incorrect comparison of entered code with true code. A pre-validation (may be null check) before comparing the codes would fix the issue
+Affected URL or select Asset from In-Scope: Glassdoor 2FA
+Affected Parameter: code
+### Vulnerability Type:
+Improper Authentication
+### Steps To Reproduce:
+1 Login to Glassdoor and navigate to https://www.glassdoor.com/member/account/securitySettings_input.htm
+
+2 Enable 2FA
+
+3 Logout
+
+4 Login again and notice OTP is asked
+
+5 Now using Burp suite intercept the POST request by sending incorrect code. [Do not forward]
+Before forwarding the request to server, remove the code and forward
+Turnoff Intercept and notice that your login request has been fulfilled
+
+### Impact
+2FA Protection bypass. Attacker could gain access despite the 2FA protection by victim
+
 
 
 
