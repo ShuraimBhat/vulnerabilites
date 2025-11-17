@@ -201,7 +201,9 @@ When an administrator tries to link an instance of jira to the H1 account, they 
 
 
 # 2.Authorization / Access Control Issues
+Authorization or access control issues occur when an application fails to properly enforce what actions a user is allowed to perform after authentication. Even if users are logged in correctly, the system must still verify whether they have the correct permissions (role, privilege, or ownership) to access a resource or perform an operation.
 
+# Variants:-
 # 1.IDOR
 ### Description
 Insecure Direct Object Reference (called IDOR from here) occurs when a application exposes a reference to an internal implementation object. Using this way, it reveals the real identifier and format/pattern used of the element in the storage backend side. The most common example of it (altrough is not limited to this one) is a record identifier in a storage system (database, filesystem and so on).
@@ -393,13 +395,18 @@ Open the vulnerable endpoint in a browser or through Burp Suite.
 
 2. Intercept the Request
 Use Burp Suite to intercept the outgoing GET request.
+
 Example original request:
+
 GET /<path> HTTP/1.1
+
 Host: <target>
 
 3. Modify the HTTP Method
 Replace the method GET with an invalid method such as:
+
 ABCD /<path> HTTP/1.1
+
 Host: <target>
 
 4. Forward the Request
@@ -407,11 +414,17 @@ Forward the modified request to the server.
 
 5. Observe the Response
 The server returns:
+
 405 Method Not Allowed or 501 Method Unimplemented, and
+
 An Allow header listing enabled methods.
+
 Example response headers:
+
 HTTP/1.1 405 Method Not Allowed
+
 Allow: GET, POST, PUT, DELETE, OPTIONS
+
 The presence of PUT and DELETE confirms insecure method configuration.
 
 ### Impact
@@ -423,3 +436,170 @@ If these methods are enabled without access controls, an attacker may:
 * Modify or overwrite existing server files.
 * Delete resources using DELETE.
 * Bypass application-layer restrictions by interacting directly with the server.
+
+
+# 3. Business Logic Vulnerabilities
+Business logic vulnerabilities arise when an application’s intended workflow, rules, or processes can be manipulated in ways the developers did not anticipate. Instead of exploiting technical bugs like XSS or SQL injection, attackers exploit flaws in how the system is designed to operate.
+
+
+# Variants:-
+# 1.Rate limit bypass
+### Found On
+The issue was identified on the login portal of Acronis Passport:
+https://passport.acronis.work/
+### Description
+The login system relies on the client’s IP address to enforce rate limits, geolocation restrictions, and OTP throttling. However, the server trusts the user-supplied X-Forwarded-For header without validation. By injecting this header, an attacker can spoof arbitrary IP addresses and evade all location- or IP-based access control mechanisms.
+
+This results in:
+
+Bypassing rate-limit protection (429 Too Many Requests)
+
+Bypassing location-based login restrictions (e.g., country-based IP checks)
+
+Bypassing OTP submission rate limits
+
+Making login attempts using employee emails from unauthorized locations
+
+Spoofing internal or employee IP ranges, allowing login attempts as if originating from trusted networks
+
+### Steps to Reproduce
+1. Bypass Rate Limit
+
+Attempt 10 failed logins → server returns 429 Too Many Requests.
+
+Repeat the same request but add:
+
+X-Forwarded-For: 12.34.56.78
+
+The request is accepted, and the rate limit resets because the server trusts the spoofed IP.
+
+Using Burp Suite Intruder, keep rotating IPs + emails → rate limits remain bypassed even after hundreds of attempts.
+
+
+2. Bypass Country-Based Login Restriction
+
+Choose a targeted employee email (e.g., publicly found email such as ab@acronis.com
+).
+
+Normally, the login attempt fails with an error (e.g., ERR-B258C8) because the attacker is not from the allowed country (e.g., Bulgaria).
+
+In Burp Suite → Proxy → Match & Replace:
+
+Replace nothing with:
+
+X-Forwarded-For: 109.104.192.0
+
+
+(IP address belonging to Bulgaria)
+
+Go to https://passport.acronis.work/login again.
+
+Attempt login with the victim’s email — the restriction disappears.
+
+Same spoofing bypass works on the OTP submit endpoint.
+
+### Impact
+
+This vulnerability allows attackers to:
+
+Bypass IP-based rate limits on login and OTP endpoints.
+
+Bypass country/IP restrictions, enabling login attempts as if coming from trusted regions.
+
+Submit unlimited login and OTP attempts, enabling practical brute-force or OTP abuse.
+
+Spoof employee or internal IP addresses, causing the system to treat attacker requests as trusted.
+
+Brute-force credentials or OTP codes without restrictions, leading to potential account takeover of employee accounts.
+
+
+# 3. Workflow byepass
+### Found On
+The issue was identified in Shopify Flow’s connector workflow system (flow-connectors.shopifycloud.com)
+### Description
+Shopify Flow generates signed URLs for connector actions (Google Sheets, Trello, Asana) that remain valid for one hour, controlled by timestamp and path_hmac.
+However, even after a staff member is removed from a store, any previously generated signed URLs remain reusable as long as the attacker refreshes the timestamp before it expires.
+The system does not invalidate prior signed URLs when:
+
+a staff member is removed,
+
+a new connector is added,
+
+a new timestamp or path_hmac is generated by the store owner, or
+
+a new account is connected to the workflow app.
+### Steps to reproduce:-
+1. Prepare a Limited Staff Account
+
+Owner logs into the shop.
+
+Adds a staff member with only “Apps” permission.
+
+
+2. Install Shopify Flow
+
+Install Flow from: https://apps.shopify.com/flow
+
+Login using the staff account.
+
+Navigate to:
+https://<shop>.myshopify.com/admin/apps/flow/connectors
+
+3. Link External Services
+
+Staff member connects:
+
+Google Sheets
+
+Trello
+
+Asana
+
+This generates a signed URL like:
+
+https://flow-connectors.shopifycloud.com/gsheet/connect?
+shop_domain=<shop>&shop_id=<id>&timestamp=<TS>&path_hmac=<HMAC>
+
+4. Remove the Staff Member
+
+Owner removes the staff account completely.
+
+
+5. Use Saved Signed URL After Removal
+
+Using the previously saved URL (as a removed staff member):
+
+it continues to work for 60 minutes
+
+access to connector settings is still granted.
+
+
+6. Refresh the Signed URL Before Expiration
+
+Before the 60-minute window expires:
+
+open the saved URL
+
+click Disconnect
+
+then click Connect
+
+connect any Google/Trello/Asana account
+
+A new timestamp and path_hmac are generated and returned to the attacker.
+
+
+7. Repeat Token Refresh Indefinitely
+
+By repeating steps 6 and 7 every ~45 minutes, the attacker can maintain permanent access, even though:
+
+the staff account is deleted,
+
+owner reconnects services,
+
+new HMACs are generated.
+
+Old and new signed URLs remain valid simultaneously, which is the core vulnerability.
+
+### Impact
+This bypasses Shopify’s access control model entirely and allows privilege persistence after user deletion—an extremely severe workflow bypass / business logic failure.
