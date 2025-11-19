@@ -5,7 +5,7 @@ These vulnerabilities arise when a system fails to properly verify user identity
 The password reset links issues by Instagram Brand gets delivered to users inbox with a http scheme and NOT https scheme.
 
 ## Found in:- 
-http://en.instagram-brand.com/register/reset/<the security token here>?email=<email address here
+http://en.instagram-brand.com/register/reset/
 
 ## STEP 1
 * Request for password reset using https://en.instagram-brand.com/register/signin
@@ -201,7 +201,7 @@ Nextcloud Talk
 As we mentioned earlier, the HackerOne for Jira application, after installing it, creates an integration between the HackerOne platform and the atlassian where cases can be synchronized from HackerOne to atlassian.And vice versa. So, after installation, administrators jira account is allowed to go `https://YOUDOMIN.atlassian.net/plugins/servlet/ac/com.hackerone/get-started-with-hackerone-on-jira`  When going to this page
 
 ### Found on:-
-jira
+Jira
 
 ## STEP ! 
 * Go to Jira cloud and create jira instance.
@@ -235,9 +235,8 @@ Authorization or access control issues occur when an application fails to proper
 
 # 1.IDOR
 Insecure Direct Object Reference (called IDOR from here) occurs when a application exposes a reference to an internal implementation object. Using this way, it reveals the real identifier and format/pattern used of the element in the storage backend side. The most common example of it (altrough is not limited to this one) is a record identifier in a storage system (database, filesystem and so on).
-IDOR do not bring a direct security issue because, by itself, it reveals only the format/pattern used for the object identifier. IDOR bring, depending on the format/pattern in place, a capacity for the attacker to mount a enumeration attack in order to try to probe access to the associated objects.
 
-## found on :
+## Found on :
 https://hackerone.com/graphql
 
 ## STEP 1
@@ -272,24 +271,30 @@ https://hackerone.com/graphql
 * Lead to disclose all of victim's new custom tags without any interaction with victim.
 
 # 2.BOLA
-### Description
 When an invalid email address/password is entered, the Web Application will not authenticate the user. But nevertheless, it is conceivable for an attacker to get around authentication and log in as anyone else, leading to Complete Account Takeover.
-### Steps To Reproduce:
-Create Two Test Account (Attacker & Victim)
 
-Using attacker's account, login at ███████
+## STEP 1
+* Create Two Test Account (Attacker & Victim)
 
-Capture request with Burp.
+## STEP 2
+* Using attacker's account, login at ███████
 
-Without sending request to "Burp Repeater", modify attacker's email to victim's email. For example REDACTED+██████ to REDACTED+█████.
+## STEP 3
+*Capture request with Burp.
 
-Change the param value:false, to value:true, and click send.
+## STEP 4
+* Without sending request to "Burp Repeater", modify attacker's email to victim's email. For example REDACTED+██████ to REDACTED+█████.
 
-Notice, attacker has successfully bypassed the authentication to login as the victim without any interaction.
+## STEP 5
+* Change the param value:false, to value:true, and click send.
 
-### Supporting Material/References:
-### Request
-Code
+## STEP 6
+* Notice, attacker has successfully bypassed the authentication to login as the victim without any interaction.
+
+## Supporting Material/References:
+ ## Request
+* Code
+```
 POST /app/login HTTP/1.1
 Host: mtnmobad.mtnbusiness.com.ng
 User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.27 Safari/537.36
@@ -312,8 +317,10 @@ Connection: close
 					"op":"a"
 					}
 					]
-### Response
-Code
+```
+## Response
+* Code
+```
 HTTP/1.1 200 OK
 Server: nginx
 ....snip....
@@ -326,174 +333,152 @@ Server: nginx
 	"level":0,
 	"notes":{
 		},
-
-### Impact
-Supposing there are 100,000 users available, a malicious actor will enumerate all 100,000 emails for all users to achieve a mass account takeover. Additionally, an attacker can lockdown an account, delete an account, change account info, and perform large data leaks.
+```
+## Impact
+* Supposing there are 100,000 users available, a malicious actor will enumerate all 100,000 emails for all users to achieve a mass account takeover. Additionally, an attacker can lockdown an account, delete an account, change account info, and perform large data leaks.
 
 # 3.Horizontal Privilege Escalation
-### Description-
-access controls are broken, unauthorized users may gain access to sensitive information, modify data, or perform actions that they shouldn't be allowed to. This can lead to various security risks, including data breaches, unauthorized privilege escalation, and other malicious activities.
-### Steps to Reproduce:-
-STEP 1:-
-Go to https://mtn.ng/offers/
-nter your number and click on Submit Button
-Click on Ok
+Access controls are broken, unauthorized users may gain access to sensitive information, modify data, or perform actions that they shouldn't be allowed to. This can lead to various security risks, including data breaches, unauthorized privilege escalation, and other malicious activities.
 
-STEP 2:
-Enter the OTP code sent to your number
-click on Validate
 
-STEP 3:
-MTN offer dashboard will automatically display
-https://mtn.ng/offers/list?phone=2348160817474
+## STEP 1
+* Go to https://mtn.ng/offers/
+* Enter your number and click on Submit Button
+* Click on Ok
 
-STEP 4:
-I changed the number that i logged in with my alternative number and it works successfully
-https://mtn.ng/offers/list?phone=2349138557692
-In this situation an attacker change the phone number to number of his choice
-Example:
-If you click on this link you will have access to my MTN number without an authentication
-https://mtn.ng/offers/list?phone=2349138557692
+## STEP 2:
+* Enter the OTP code sent to your number
+* click on Validate
 
-### Impact
-This vulnerability allow an attacker to access any MTN number in Nigeria and allow threat actors to subscribe data or airtime to the victims.
-It can also allow attackers to send messages of their choice to their targeted victims and the victims might think that the message come from MTN.
+## STEP 3:
+* MTN offer dashboard will automatically display
+* https://mtn.ng/offers/list?phone=2348160817474
+
+## STEP 4:
+* I changed the number that i logged in with my alternative number and it works successfully
+`https://mtn.ng/offers/list?phone=2349138557692`
+* In this situation an attacker change the phone number to number of his choice
+* Example:
+ *If you click on this link you will have access to my MTN number without an authentication
+  `https://mtn.ng/offers/list?phone=2349138557692`
+
+## Impact
+* This vulnerability allow an attacker to access any MTN number in Nigeria and allow threat actors to subscribe data or airtime to the victims.
+* It can also allow attackers to send messages of their choice to their targeted victims and the victims might think that the message come from MTN.
 
 # 4.Vertical Privilige Escalation
-### Found On
-The issue was identified in the Lovable AI Workspace Management API, specifically the endpoint:
-POST /workspaces/<WORKSPACE_ID>/tool-preferences/ai_gateway/enable
-### Description
 The API endpoint responsible for enabling or disabling the workspace-wide Lovable AI feature fails to enforce proper server-side role authorization.
 Although the ability to toggle this feature is intended exclusively for workspace Owners/Admins, an account with the Editor role can directly call the same endpoint using its own JWT and successfully disable the feature.
-### Steps to reproduce:-
-1. Log in as Admin (Account A)
 
-Navigate to workspace settings and disable the Lovable AI feature.
+### Found On
+`POST /workspaces/<WORKSPACE_ID>/tool-preferences/ai_gateway/enable`
 
-Capture the network request responsible for this action:
-
-Captured Admin Request
-
+## STEP 1
+* Log in as Admin (Account A)
+* Navigate to workspace settings and disable the Lovable AI feature.
+* Capture the network request responsible for this action:
+* Captured Admin Request
+```
 POST /workspaces/<WORKSPACE_ID>/tool-preferences/ai_gateway/enable HTTP/2
 Host: lovable-api.com
 Authorization: Bearer <OWNER_TOKEN>
 Content-Type: application/json
 
 {"approval_preference":"disable"}
+```
 
-2. Modify the Request
-
-Replace the Authorization header with the Editor’s JWT token:
-
-Modified Request Using Editor Token
-
+## STEP 2
+* Modify the Request
+* Replace the Authorization header with the Editor’s JWT token:
+ * Modified Request Using Editor Token
+ ```
 POST /workspaces/<WORKSPACE_ID>/tool-preferences/ai_gateway/enable HTTP/2
 Host: lovable-api.com
 Authorization: Bearer <EDITOR_JWT>
 Content-Type: application/json
-
 {"approval_preference":"disable"}
+```
 
-3. Send the Request as Editor
+## STEP 3
+* Send the Request as Editor
+* Even though Editors should not be allowed to toggle this setting, the server accepts the request and disables Lovable AI across the workspace.
 
-Even though Editors should not be allowed to toggle this setting,
-the server accepts the request and disables Lovable AI across the workspace.
-
-### Impact
-The Lovable AI feature powers all the AI-assisted components of a workspace, including:
-* Prompt integrations
-* AI-generated content
-* Model-driven actions
-* Automated assistance and tooling
-* Any feature using the AI Gateway backend
-Since only Admins are supposed to control this workspace-wide setting, allowing an Editor to disable it creates a significant disruption:
-* Editors can break functionality for all workspace members.
-* Critical AI features become non-functional.
-* Core workflows relying on AI are halted.
-* This leads to workspace-wide operational downtime.
-* Represents a clear violation of role-based access control (RBAC) expectations.
-* This vulnerability constitutes Broken Access Control and allows unauthorized privilege escalation from Editor → Admin-level action.
+## Impact
+* The Lovable AI feature powers all the AI-assisted components of a workspace, including:
+ * Prompt integrations
+ * AI-generated content
+ * Model-driven actions
+ * Automated assistance and tooling
+ * Any feature using the AI Gateway backend
+* Since only Admins are supposed to control this workspace-wide setting, allowing an Editor to disable it creates a significant disruption:
+ * Editors can break functionality for all workspace members.
+ * Critical AI features become non-functional.
+ * Core workflows relying on AI are halted.
+ * This leads to workspace-wide operational downtime.
+ * Represents a clear violation of role-based access control (RBAC) expectations.
+ * This vulnerability constitutes Broken Access Control and allows unauthorized privilege escalation from Editor → Admin-level action.
+   
 
 # 6. HTTP method tampering byepass
-### Found On
-The issue was discovered on DRIVE.NET
-### Description
 The target server improperly reveals the full list of supported HTTP methods when sent an invalid or unsupported method. Instead of securely rejecting the request, the server responds with a "405 Method Not Allowed" status and an Allow header listing all permitted methods.
-### Steps to Reproduce
-1. Navigate to the target URL
-Open the vulnerable endpoint in a browser or through Burp Suite.
 
-2. Intercept the Request
-Use Burp Suite to intercept the outgoing GET request.
+## Found On
+The issue was discovered on DRIVE.NET
 
-Example original request:
+## STEP 1
+* Navigate to the target URL
+* Open the vulnerable endpoint in a browser or through Burp Suite.
 
-GET /<path> HTTP/1.1
+## STEP 2
+* Intercept the Request
+* Use Burp Suite to intercept the outgoing GET request.
+  *Example original request:
+  ```
+   GET /<path> HTTP/1.1
+   Host: <target>
+  ```
 
-Host: <target>
+## STEP 3
+* Modify the HTTP Method
+* Replace the method GET with an invalid method such as:
+  ```
+  ABCD /<path> HTTP/1.1
+  Host: <target>
+  ````
 
-3. Modify the HTTP Method
-Replace the method GET with an invalid method such as:
+## STEP 4
+* Forward the Request
+* Forward the modified request to the server.
 
-ABCD /<path> HTTP/1.1
+## STEP 5
+* Observe the Response
+* The server returns:
+ * 405 Method Not Allowed or 501 Method Unimplemented, and An Allow header listing enabled methods.
+* Example response headers:
+```
+  HTTP/1.1 405 Method Not Allowed
+  Allow: GET, POST, PUT, DELETE, OPTIONS
+```  
+* The presence of PUT and DELETE confirms insecure method configuration.
 
-Host: <target>
-
-4. Forward the Request
-Forward the modified request to the server.
-
-5. Observe the Response
-The server returns:
-
-405 Method Not Allowed or 501 Method Unimplemented, and
-
-An Allow header listing enabled methods.
-
-Example response headers:
-
-HTTP/1.1 405 Method Not Allowed
-
-Allow: GET, POST, PUT, DELETE, OPTIONS
-
-The presence of PUT and DELETE confirms insecure method configuration.
-
-### Impact
-
-The server discloses sensitive HTTP methods (e.g., PUT, DELETE) to any client.
-
-If these methods are enabled without access controls, an attacker may:
-* Upload arbitrary files via PUT (potential web shell or malicious content).
-* Modify or overwrite existing server files.
-* Delete resources using DELETE.
-* Bypass application-layer restrictions by interacting directly with the server.
+## Impact
+* The server discloses sensitive HTTP methods (e.g., PUT, DELETE) to any client.
+* If these methods are enabled without access controls, an attacker may:
+ * Upload arbitrary files via PUT (potential web shell or malicious content).
+ * Modify or overwrite existing server files.
+ * Delete resources using DELETE.
+ * Bypass application-layer restrictions by interacting directly with the server.
 
 
 # 3. Business Logic Vulnerabilities
 Business logic vulnerabilities arise when an application’s intended workflow, rules, or processes can be manipulated in ways the developers did not anticipate. Instead of exploiting technical bugs like XSS or SQL injection, attackers exploit flaws in how the system is designed to operate.
 
-
-# Variants:-
 # 1.Rate limit bypass
-### Found On
-The issue was identified on the login portal of Acronis Passport:
-https://passport.acronis.work/
-### Description
 The login system relies on the client’s IP address to enforce rate limits, geolocation restrictions, and OTP throttling. However, the server trusts the user-supplied X-Forwarded-For header without validation. By injecting this header, an attacker can spoof arbitrary IP addresses and evade all location- or IP-based access control mechanisms.
 
-This results in:
+## Found On
+The issue was identified on the login portal of Acronis Passport:https://passport.acronis.work/
 
-Bypassing rate-limit protection (429 Too Many Requests)
-
-Bypassing location-based login restrictions (e.g., country-based IP checks)
-
-Bypassing OTP submission rate limits
-
-Making login attempts using employee emails from unauthorized locations
-
-Spoofing internal or employee IP ranges, allowing login attempts as if originating from trusted networks
-
-### Steps to Reproduce
 1. Bypass Rate Limit
 
 Attempt 10 failed logins → server returns 429 Too Many Requests.
