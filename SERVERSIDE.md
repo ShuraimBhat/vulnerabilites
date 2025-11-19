@@ -111,7 +111,7 @@ Because a portion of users reused passwords on multiple services and the platfor
 
 
 # 3. Password reset flow
-* A password reset endpoint allowed the attacker to initiate and complete resets without proper verification of identity or ownership
+A password reset endpoint allowed the attacker to initiate and complete resets without proper verification of identity or ownership
 
 ## STEP 1
 * Login as a admin on Browser A & keep it.
@@ -145,7 +145,7 @@ Because a portion of users reused passwords on multiple services and the platfor
 * Example used by Google: 256-bit random token mapped to server-side table.
 
 # 4. 2FA Byepass Technique
-this is a failure in null check of the entered code. In simple terms, the 2FA while logging in can be bypassed by sending a blank code. This could be because of incorrect comparison of entered code with true code. A pre-validation (may be null check) before comparing the codes would fix the issue
+This is a failure in null check of the entered code. In simple terms, the 2FA while logging in can be bypassed by sending a blank code. This could be because of incorrect comparison of entered code with true code. A pre-validation (may be null check) before comparing the codes would fix the issue
 Affected URL or select Asset from In-Scope: Glassdoor 2FA
 
 
@@ -176,7 +176,7 @@ The password-protected room in Nextcloud Talk does not regenerate or invalidate 
 ## Found in:-
 Nextcloud Talk
 
-## STEO 1 
+## STEP 1 
 * userA shares a talk room and protects it with a password
 
 ## STEP 2 
@@ -198,8 +198,7 @@ Nextcloud Talk
 * The session id should be renewed once the password is entered.
 
 # 6.JWT misconfiguration
-As we mentioned earlier, the HackerOne for Jira application, after installing it, creates an integration between the HackerOne platform and the atlassian where cases can be synchronized from HackerOne to atlassian
-And vice versa. So, after installation, administrators jira account is allowed to go 'https://YOUDOMIN.atlassian.net/plugins/servlet/ac/com.hackerone/get-started-with-hackerone-on-jira' When going to this page
+As we mentioned earlier, the HackerOne for Jira application, after installing it, creates an integration between the HackerOne platform and the atlassian where cases can be synchronized from HackerOne to atlassian.And vice versa. So, after installation, administrators jira account is allowed to go `https://YOUDOMIN.atlassian.net/plugins/servlet/ac/com.hackerone/get-started-with-hackerone-on-jira`  When going to this page
 
 ### Found on:-
 jira
@@ -239,7 +238,7 @@ Insecure Direct Object Reference (called IDOR from here) occurs when a applicati
 IDOR do not bring a direct security issue because, by itself, it reveals only the format/pattern used for the object identifier. IDOR bring, depending on the format/pattern in place, a capacity for the attacker to mount a enumeration attack in order to try to probe access to the associated objects.
 
 ## found on :
-'https://hackerone.com/graphql'
+https://hackerone.com/graphql
 
 ## STEP 1
 * Create two h1 accounts as attacker and victim and then create a scope asset respectively
@@ -253,8 +252,8 @@ IDOR do not bring a direct security issue because, by itself, it reveals only th
 ## STEP 4
 * You will obtain a request whose the operationName: AddTagToAssets and contains tagId parameter which has a base64 cipher text within
 
-## STEP $
-* If you decode it, the result's format is gid://hackerone/AsmTag/4979xxxx
+## STEP 5
+* If you decode it, the result's format is gid: `//hackerone/AsmTag/4979xxxx`
 
 ## STEP 6
 * Bruteforce the AsmTagId then replace to your tagId parameter
@@ -262,8 +261,9 @@ IDOR do not bring a direct security issue because, by itself, it reveals only th
 ## STEP 7
 * You will obtain 200 OK response status contains the error messages:
 * Code
-{"data":null,"errors":[{"message":"AsmTag does not exist","locations":[{"line":2,"column":3}],"path":["addTagToAssets"],"type":"NOT_FOUND"}]}
-
+  ```
+	{"data":null,"errors":[{"message":"AsmTag does not exist","locations":[{"line":2,"column":3}],"path":["addTagToAssets"],"type":"NOT_FOUND"}]}
+	```
 ## Remediation:
 * IDOR means that you directly alter a database object by using user submitted data in the query before checking or validating that data.
 * You should first check if the user that submits the request isn't tampering and isn't submitting any ID's that do not belong to his account.
