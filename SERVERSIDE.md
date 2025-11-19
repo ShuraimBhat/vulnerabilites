@@ -8,40 +8,50 @@ The password reset links issues by Instagram Brand gets delivered to users inbox
 http://en.instagram-brand.com/register/reset/<the security token here>?email=<email address here
 
 ## STEP 1
-Request for password reset using https://en.instagram-brand.com/register/signin
+* Request for password reset using https://en.instagram-brand.com/register/signin
+
 ## STEP 2 
-Go to your inbox
+* Go to your inbox
+
 ## STEP 3 
-Right click on that hyperlink and copy and paste it in notepad. (HTTP scheme is seen here)
+* Right click on that hyperlink and copy and paste it in notepad. (HTTP scheme is seen here)
+
 ## STEP 4
-Now Attach a local proxy tool to your browser.
+* Now Attach a local proxy tool to your browser.
+
 ## STEP 5 
-Request the copied link in that browser and keep on intercepting.
+* Request the copied link in that browser and keep on intercepting.
+
 ## STEP 6 
-The first request goes in HTTP like this:
-* GET '/track/click/30956340/instagram-brand.com?p=<token here> HTTP/1.1 Host: mandrillapp.com User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8 Accept-Language: en-US,en;q=0.5 Accept-Encoding: gzip, deflate Connection: keep-alive Upgrade-Insecure-Requests: 1'
+*The first request goes in HTTP like this:
+ * GET `/track/click/30956340/instagram-brand.com?p=<token here> HTTP/1.1 Host: mandrillapp.com User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0 Accept:  text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8 Accept-Language: en-US,en;q=0.5 Accept-Encoding: gzip, deflate Connection: keep-alive Upgrade-Insecure-Requests: 1`
+
 ## STEP 7
-The response to that request is:
-'HTTP/1.1 302 Moved Temporarily Server: nginx/1.6.3 Date: Thu, 16 Feb 2017 02:58:53 GMT Content-Type: text/html; charset=utf-8 Set-Cookie: PHPSESSID=dc43ed4a78f737e1cff9ecf05ede3680; expires=Thu, 16-Feb-2017 12:58:01 GMT; path=/; secure; HttpOnly Expires: Thu, 19 Nov 1981 08:52:00 GMT Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0 Pragma: no-cache Set-Cookie: PHPSESSID=dc43ed4a78f737e1cff9ecf05ede3680; expires=Thu, 16-Feb-2017 12:58:01 GMT; path=/; secure; httponly Location: https://instagram-brand.com/register/reset/<new token>?email=<your email> Vary: Accept-Encoding Content-Length: 0'
+* The response to that request is:
+`HTTP/1.1 302 Moved Temporarily Server: nginx/1.6.3 Date: Thu, 16 Feb 2017 02:58:53 GMT Content-Type: text/html; charset=utf-8 Set-Cookie: PHPSESSID=dc43ed4a78f737e1cff9ecf05ede3680; expires=Thu, 16-Feb-2017 12:58:01 GMT; path=/; secure; HttpOnly Expires: Thu, 19 Nov 1981 08:52:00 GMT Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0 Pragma: no-cache Set-Cookie: PHPSESSID=dc43ed4a78f737e1cff9ecf05ede3680; expires=Thu, 16-Feb-2017 12:58:01 GMT; path=/; secure; httponly Location: https://instagram-brand.com/register/reset/<new token>?email=<your email> Vary: Accept-Encoding Content-Length: 0`
+
 ## STEP 8
-Then the next request is:
-'GET /register/reset/<token>?email=<email> HTTP/1.1 Host: instagram-brand.com User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8 Accept-Language: en-US,en;q=0.5 Accept-Encoding: gzip, deflate, br Cookie: pll_language=en; _ga=GA1.2.1670792457.1487004320; _gat=1 Connection: keep-alive Upgrade-Insecure-Requests: 1'
+* Then the next request is:
+`GET /register/reset/<token>?email=<email> HTTP/1.1 Host: instagram-brand.com User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8 Accept-Language: en-US,en;q=0.5 Accept-Encoding: gzip, deflate, br Cookie: pll_language=en; _ga=GA1.2.1670792457.1487004320; _gat=1 Connection: keep-alive Upgrade-Insecure-Requests: 1`
+
 ## STEP 9 
-The response is:
-'HTTP/1.1 302 Found Server: nginx Date: Thu, 16 Feb 2017 03:00:30 GMT Content-Type: text/html; charset=utf-8 Content-Length: 0 Connection: keep-alive Location: https://en.instagram-brand.com/register/reset/<token>?email=<email> X-rq: lhr2 102 131 3129 Age: 0 X-Cache: miss'
+* The response is:
+`HTTP/1.1 302 Found Server: nginx Date: Thu, 16 Feb 2017 03:00:30 GMT Content-Type: text/html; charset=utf-8 Content-Length: 0 Connection: keep-alive Location: https://en.instagram-brand.com/register/reset/<token>?email=<email> X-rq: lhr2 102 131 3129 Age: 0 X-Cache: miss`
+
 ## STEP 10
-The final request is:
-'GET /register/reset/<token>?email=<email> HTTP/1.1 Host: en.instagram-brand.com User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8 Accept-Language: en-US,en;q=0.5 Accept-Encoding: gzip, deflate, br Cookie: pll_language=en; _ga=GA1.2.1670792457.1487004320; _gat=1 Connection: keep-alive Upgrade-Insecure-Requests: 1'
+* The final request is:
+`GET /register/reset/<token>?email=<email> HTTP/1.1 Host: en.instagram-brand.com User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8 Accept-Language: en-US,en;q=0.5 Accept-Encoding: gzip, deflate, br Cookie: pll_language=en; _ga=GA1.2.1670792457.1487004320; _gat=1 Connection: keep-alive Upgrade-Insecure-Requests: 1`
+
 ## STEPS 11
-The final response is:
-'HTTP/1.1 404 Not Found Server: nginx Date: Thu, 16 Feb 2017 03:01:58 GMT Content-Type: text/html; charset=UTF-8 Connection: keep-alive X-Frame-Options: deny X-hacker: If you're reading this, you should visit automattic.com/jobs and apply to join the fun, mention this header. Link: <https://instagram-brand.com/wp-json/>; rel="https://api.w.org/" X-rq: lhr1 102 131 3129 Age: 0 X-Cache: miss Vary: Accept-Encoding Content-Length: 28183'
+* The final response is:
+`HTTP/1.1 404 Not Found Server: nginx Date: Thu, 16 Feb 2017 03:01:58 GMT Content-Type: text/html; charset=UTF-8 Connection: keep-alive X-Frame-Options: deny X-hacker: If you're reading this, you should visit automattic.com/jobs and apply to join the fun, mention this header. Link: <https://instagram-brand.com/wp-json/>; rel="https://api.w.org/" X-rq: lhr1 102 131 3129 Age: 0 X-Cache: miss Vary: Accept-Encoding Content-Length: 28183`
 
 ## Impact:-
-This causes an attacker stealing those links and performing mass account takeovers and security compromises.
+* This causes an attacker stealing those links and performing mass account takeovers and security compromises.
 
 ## Mitigation:-
-This issues has a very easy solution. I have myself performed this and it worked !!.
-Whenever the code responsible for sending password reset link makes those links, just add https as scheme instead of http. And you will observe that now all the accounts are safe and data cannot be stolen.
+* This issues has a very easy solution. I have myself performed this and it worked !!.
+* Whenever the code responsible for sending password reset link makes those links, just add https as scheme instead of http. And you will observe that now all the accounts are safe and data cannot be stolen.
 
 # 2. Credential stuffing
 The attacker used previously compromised credentials from unrelated breaches and attempted automated logins on 23andMe’s authentication endpoint.
@@ -55,18 +65,18 @@ Because a portion of users reused passwords on multiple services and the platfor
 * Gather a list of known breached credentials (email + password pairs) belonging to test accounts.
 
 ## STEP 2
-*Configure Automated Login Tool
-*Use any credential-stuffing automation (Burp Intruder, Hydra, Python script).
-*Set the target to the application’s /login endpoint.
+* Configure Automated Login Tool
+* Use any credential-stuffing automation (Burp Intruder, Hydra, Python script).
+* Set the target to the application’s /login endpoint.
 
 ## STEP 3 
-*Execute High-Volume Login Attempts
-*Send the credential list to the authentication endpoint at a controlled but high rate.
-### Observe the following:
-* No effective rate-limiting
-* No CAPTCHA
-* No MFA prompt
-* No account lockout after failures
+* Execute High-Volume Login Attempts
+* Send the credential list to the authentication endpoint at a controlled but high rate.
+* Observe the following:
+ * No effective rate-limiting
+ * No CAPTCHA
+ * No MFA prompt
+ * No account lockout after failures
 
 ## STEP 4 Identify Successful Logins
 * If reused credentials are accepted, the platform logs in the attacker normally without any alert.
@@ -111,13 +121,15 @@ Because a portion of users reused passwords on multiple services and the platfor
 * Note the sessionID cookie. Enter the email address and Proceed >.
 
 ## STEP 3 
-*Open the reset link received by email on Browser B. Note that the sessionID remained the same. Change the password. Note that the user have logged to dashboard without invalidating the current session and the sessionID remained the same.
+* Open the reset link received by email on Browser B.
+* Note that the sessionID remained the same.
+* Change the password.
+* Note that the user have logged to dashboard without invalidating the current session and the sessionID remained the same.
 
 ## STEP 4
-Come back to Browser A and note that the user session is still valid.
+* Come back to Browser A and note that the user session is still valid.
 
 ## Attack vector
-
 * Invalidating other existing session: The sessionID cookie which drives everything about user accounts, is set to expire on Session which means until the user explicitly clicks the Logout or the browser/tab is closed. Thus if an attacker some how (phishing or brute force) compromised an user account, the hacked session remained the same even though the account owner resets the password or change the email address.
 * Invalidating the current session after the password recovery: Attacker with physical access to the user's computer, leaves the Revive Adserver login page open by noting down the sessionID. User comes, resets the password and logged in. As the attacker knows the sessionID, he can use that in logging in as the user. This works even the attacker not having admin access on the system to install a keylogger and valid until the user logs out and the session is destroyed.
 
@@ -138,16 +150,16 @@ Affected URL or select Asset from In-Scope: Glassdoor 2FA
 
 
 ## STEP 1
-* Login to Glassdoor and navigate to 'https://www.glassdoor.com/member/account/securitySettings_input.htm'
+* Login to Glassdoor and navigate to https://www.glassdoor.com/member/account/securitySettings_input.htm
 
 ## STEP 2
-*Enable 2FA
+* Enable 2FA
 
 ## STEP 3
-*Logout
+* Logout
 
 ## STEP 4 
-*Login again and notice OTP is asked
+* Login again and notice OTP is asked
 
 ## STEP 5 
 * Now using Burp suite intercept the POST request by sending incorrect code. [Do not forward]
@@ -172,7 +184,7 @@ Nextcloud Talk
 
 ## STEP 3 
 * Attacker steals the cookies from userB
-
+ 
 ## STEP 4 
 * userB logs in
 
@@ -180,10 +192,10 @@ Nextcloud Talk
 * attacker is now also able to read the conversation etc
 
 ## Impact
-In short the attacker is able to take over the session of the guest userB on this talk room.
+* In short the attacker is able to take over the session of the guest userB on this talk room.
 
 ## Mitigation
-The session id should be renewed once the password is entered.
+* The session id should be renewed once the password is entered.
 
 # 6.JWT misconfiguration
 As we mentioned earlier, the HackerOne for Jira application, after installing it, creates an integration between the HackerOne platform and the atlassian where cases can be synchronized from HackerOne to atlassian
@@ -229,35 +241,35 @@ IDOR do not bring a direct security issue because, by itself, it reveals only th
 ## found on :
 'https://hackerone.com/graphql'
 
-### Steps to reproduce:
-Create two h1 accounts as attacker and victim and then create a scope asset respectively
+## STEP 1
+* Create two h1 accounts as attacker and victim and then create a scope asset respectively
 
-Victim create a new custom tag
+## STEP 2
+* Victim create a new custom tag
 
-Assign tag to attacker's scope then capture the request
+## STEP 3
+* Assign tag to attacker's scope then capture the request
 
-You will obtain a request whose the operationName: AddTagToAssets and contains tagId parameter which has a base64 cipher text within
+## STEP 4
+* You will obtain a request whose the operationName: AddTagToAssets and contains tagId parameter which has a base64 cipher text within
 
-If you decode it, the result's format is gid://hackerone/AsmTag/4979xxxx
+## STEP $
+* If you decode it, the result's format is gid://hackerone/AsmTag/4979xxxx
 
-Bruteforce the AsmTagId then replace to your tagId parameter
+## STEP 6
+* Bruteforce the AsmTagId then replace to your tagId parameter
 
-You will obtain 200 OK response status contains the error messages:
-
-Code
+## STEP 7
+* You will obtain 200 OK response status contains the error messages:
+* Code
 {"data":null,"errors":[{"message":"AsmTag does not exist","locations":[{"line":2,"column":3}],"path":["addTagToAssets"],"type":"NOT_FOUND"}]}
 
-But no worries, this issue can still be produced if you look at your assets page
+## Remediation:
+* IDOR means that you directly alter a database object by using user submitted data in the query before checking or validating that data.
+* You should first check if the user that submits the request isn't tampering and isn't submitting any ID's that do not belong to his account.
 
-Successfully to disclose victim's custom tag without any interaction with victim
-
-Detail about vulnerability and PoC on the attachment video file below.
-
-### Remediation:
-IDOR means that you directly alter a database object by using user submitted data in the query before checking or validating that data.
-You should first check if the user that submits the request isn't tampering and isn't submitting any ID's that do not belong to his account.
-### Impact
-Lead to disclose all of victim's new custom tags without any interaction with victim.
+## Impact
+* Lead to disclose all of victim's new custom tags without any interaction with victim.
 
 # 2.BOLA
 ### Description
